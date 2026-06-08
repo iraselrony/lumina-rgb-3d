@@ -1,7 +1,7 @@
 .hero {
   position: relative;
   padding-top: 130px;
-  padding-bottom: 80px;
+  padding-bottom: 60px;
   min-height: 100svh;
 }
 
@@ -64,40 +64,16 @@
   letter-spacing: 0.04em;
 }
 
-/* Stage */
-.hero__stage {
+/* Right column is reserved for the sticky <LivePreview /> which is rendered
+   outside this section. The slot keeps the column layout stable so the
+   text on the left doesn't shift. */
+.hero__stage-slot {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
   max-height: 76svh;
-}
-.hero__stage-bezel { height: 100%; }
-.hero__stage-core {
-  height: 100%;
-  background:
-    radial-gradient(ellipse at 50% 65%, rgba(255,255,255,0.04), transparent 60%),
-    var(--ink-2);
-}
-
-.hero__stage-overlay {
-  position: absolute;
-  inset: 0;
   pointer-events: none;
-  z-index: 2;
 }
-.hero__stage-corner {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 10px;
-  color: var(--muted);
-  letter-spacing: 0.18em;
-}
-.hero__stage-corner.tl { top: 18px; left: 18px; }
-.hero__stage-corner.tr { top: 18px; right: 18px; align-items: flex-end; }
-.hero__stage-corner.bl { bottom: 18px; left: 18px; }
-.hero__stage-corner.br { bottom: 18px; right: 18px; align-items: flex-end; }
 
 /* Ticker */
 .hero__ticker {
@@ -128,6 +104,6 @@
   .hero__inner { grid-template-columns: 1fr; gap: 32px; }
   .hero__copy { max-width: 100%; text-align: left; }
   .hero__title { font-size: clamp(2.6rem, 9vw, 4.4rem); }
-  .hero__stage { max-height: 60svh; }
+  .hero__stage-slot { max-height: 0; aspect-ratio: auto; }
   .hero__meta { grid-template-columns: 1fr; gap: 24px; }
 }

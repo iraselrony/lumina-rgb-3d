@@ -1,26 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
 import { useLumina } from '../store/cart'
-import { Stage } from './Scene3D/Stage'
 import { IconArrow, IconSun, IconMoon, IconRadio } from './Icon'
 import './Hero.css'
-
-function useScrollProgress(ref) {
-  const [p, setP] = useState(0)
-  useEffect(() => {
-    const onScroll = () => {
-      const el = ref.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const total = rect.height - window.innerHeight
-      const scrolled = Math.min(Math.max(-rect.top, 0), Math.max(total, 1))
-      setP(scrolled / Math.max(total, 1))
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [ref])
-  return p
-}
 
 const QUICK = [
   { c: '#ff00ff', s: '#00ffff' },
@@ -32,21 +12,16 @@ const QUICK = [
 ]
 
 export function Hero() {
-  const heroRef = useRef(null)
   const color = useLumina((s) => s.color)
-  const secondary = useLumina((s) => s.secondary)
   const intensity = useLumina((s) => s.intensity)
-  const finish = useLumina((s) => s.finish)
   const isOn = useLumina((s) => s.isOn)
   const togglePower = useLumina((s) => s.togglePower)
   const setIntensity = useLumina((s) => s.setIntensity)
   const setColor = useLumina((s) => s.setColor)
   const addToCart = useLumina((s) => s.addToCart)
 
-  const scroll = useScrollProgress(heroRef)
-
   return (
-    <section className="hero" id="hero" ref={heroRef}>
+    <section className="hero" id="hero">
       <div className="hero__inner">
         <div className="hero__copy">
           <p className="eyebrow reveal" data-delay="1">
@@ -68,7 +43,7 @@ export function Hero() {
               href="#order"
               onClick={(e) => {
                 e.preventDefault()
-                addToCart({ productId: 'lumina-rgb-one', name: 'Lumina RGB One', price: 129, color, finish })
+                addToCart({ productId: 'lumina-rgb-one', name: 'Lumina RGB One', price: 129, color, finish: 'matte' })
               }}
             >
               <span>Order — $129</span>
@@ -112,36 +87,10 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="hero__stage">
-          <div className="bezel hero__stage-bezel">
-            <div className="bezel__core hero__stage-core">
-              <Stage
-                color={color}
-                secondary={secondary}
-                intensity={intensity}
-                finish={finish}
-                isOn={isOn}
-                scroll={scroll}
-              />
-              <div className="hero__stage-overlay">
-                <div className="hero__stage-corner tl">
-                  <span className="mono">L01</span><span className="mono">RGB.ONE</span>
-                </div>
-                <div className="hero__stage-corner tr">
-                  <span className="mono">v1.0</span>
-                  <span className="mono" style={{ color: isOn ? 'var(--accent)' : 'var(--muted)' }}>{isOn ? 'ONLINE' : 'OFFLINE'}</span>
-                </div>
-                <div className="hero__stage-corner bl">
-                  <span className="mono" style={{ display: 'block', writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>SCROLL / CONFIGURE</span>
-                </div>
-                <div className="hero__stage-corner br">
-                  <span className="mono">{finish.toUpperCase()}</span>
-                  <span className="mono">04 / 04</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* 3D lamp is rendered by <LivePreview /> which is sticky and travels
+            from the end of the hero into the customizer. The right column is
+            intentionally empty to give the sticky stage room. */}
+        <div className="hero__stage-slot" aria-hidden="true" />
       </div>
 
       <div className="hero__ticker mono">

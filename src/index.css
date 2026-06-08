@@ -8,6 +8,10 @@
   --paper: #f6f4ef;
   --paper-2: #ece8df;
 
+  /* The page-wide background tint. Default to the base ink, but gets
+     biased toward the lamp color as the user scrolls through LivePreview. */
+  --bg-tint: var(--ink);
+
   /* Foreground */
   --fg: #f4f1ea;
   --fg-2: #cfccc4;
@@ -52,13 +56,16 @@ html {
 
 body {
   color: var(--fg);
-  background: var(--ink);
+  /* Background now reacts to the live --bg-tint CSS variable which is
+     rewritten by <LivePreview /> as the user scrolls. */
+  background: var(--bg-tint);
   font-family: var(--f-body);
   font-weight: 400;
   font-size: 16px;
   line-height: 1.5;
   overflow-x: hidden;
   letter-spacing: -0.005em;
+  transition: background 0.6s var(--ease);
 }
 
 button, a, input, select, textarea {
